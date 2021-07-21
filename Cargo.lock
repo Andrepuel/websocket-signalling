@@ -1377,19 +1377,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "signaling"
-version = "0.1.0"
-dependencies = [
- "actix",
- "actix-web",
- "actix-web-actors",
- "async-std",
- "env_logger",
- "serde",
- "tokio",
-]
-
-[[package]]
 name = "slab"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1744,6 +1731,19 @@ checksum = "e828417b379f3df7111d3a2a9e5753706cae29c41f7c4029ee9fd77f3e09e582"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
+]
+
+[[package]]
+name = "websocket-signaling"
+version = "0.1.0"
+dependencies = [
+ "actix",
+ "actix-web",
+ "actix-web-actors",
+ "async-std",
+ "env_logger",
+ "serde",
+ "tokio",
 ]
 
 [[package]]

@@ -128,20 +128,28 @@ impl Signaling {
         let conn = Connection::new();
         let (addr, res) = ws::start_with_addr(conn, &req, stream)?;
 
+        self.new_connection(addr, channel);
+
+        Ok(res)
+    }
+
+    fn new_connection(&mut self, user: Addr<Connection>, channel: &str) {
         match self.half_channels.entry(channel.into()) {
             std::collections::hash_map::Entry::Occupied(entry) => {
                 let peer = entry.remove();
-                peer.do_send(ControlMessage::Connected(addr.clone()));
-                addr.do_send(ControlMessage::Connected(peer));
-                addr.do_send(ControlMessage::Dialer);
+                if !peer.connected() {
+                    return self.new_connection(user, channel);
+                }
+
+                peer.do_send(ControlMessage::Connected(user.clone()));
+                user.do_send(ControlMessage::Connected(peer));
+                user.do_send(ControlMessage::Dialer);
             }
             std::collections::hash_map::Entry::Vacant(entry) => {
-                addr.do_send(ControlMessage::Listener);
-                entry.insert(addr);
+                user.do_send(ControlMessage::Listener);
+                entry.insert(user);
             }
         }
-
-        Ok(res)
     }
 }
 
